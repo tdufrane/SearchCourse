@@ -1,0 +1,40 @@
+﻿@using SearchCourse.Models;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<SearchModel>
+@{
+    Layout = "BasicNav.cshtml";
+}
+<section id="single-content" class="bg-white">
+    <div class="container">
+        <div class="section-content blog-content">
+            <div class="row">
+                <div class="col-md-8 offset-md-2 mt-4">
+                    <article>
+                        <p>Your search for <strong>@Model.Query</strong> returned a number of <strong> @Model.TotalResults</strong> result(s) on item types: <strong>@Model.DoctypeToSearch</strong></p>
+                        @if (Model.SearchResults != null && Model.SearchResults.Any())
+                        {
+                            <ul>
+                                @foreach (var item in Model.SearchResults)
+                                {
+                                    <li>
+                                        <a href="@item.PublishedItem.Url()">@item.PublishedItem.Name</a>
+                                        @{
+                                            var pDate = item.PublishedItem.Value<DateTime>("publishingDate");
+                                            if (pDate == DateTime.MinValue)
+                                            {
+                                                pDate = item.PublishedItem.CreateDate;
+                                            }
+                                            if (item.PublishedItem.GetType().ToString() == "Umbraco.Cms.Web.Common.PublishedModels.Blog")
+                                            {
+                                                <p>@pDate.ToString("dd MMMM yyyy")</p>
+                                            }
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
